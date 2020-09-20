@@ -14,10 +14,19 @@
 <body>
     <div class="mt-3" id="app">
         <div class="container">
-            <div class="container bg-info" id="div-title" style="padding: 0.8rem; border-radius: 0.28rem;">
-                <h1 class="mt-2">{{title}}</h1>
+            <div class="container" id="div-title"
+                style="padding: 0.8rem; border-radius: 0.28rem; display:inline-block; box-shadow: 0.2rem 0.2rem 0.2rem 0.2rem rgb(230, 228, 225);">
+                <div class="row">
+                    <div class="col-8">
+                        <h1 class="mt-2">{{title}}</h1>
+                    </div>
+                    <div class="col-4">
+                        <button type="button" class="btn btn-info mt-2" id="btn-consolidation">Sales Consolidation</button>
+                        <button type="button" class="btn btn-danger mt-2" id="btn-detailed" hidden>Go back</button>
+                    </div>
+                </div>
             </div>
-            <table class="mt-5 table" v-if="salesProducts">
+            <table class="mt-5 table" v-if="salesProducts" id="table-consolidation" hidden>
                 <thead>
                     <tr>
                         <th>Id</th>
@@ -36,11 +45,12 @@
                     <tr>
                         <td>SOMA</td>
                         <td>TOTAL</td>
-                        <td>{{calculatTheTotal(salesProducts)}}</tr>
+                        <td>{{calculatTheTotal(salesProducts)}}
+                    </tr>
                     </tr>
                 </tfoot>
             </table>
-            <!-- <table class="mt-5 table">
+            <table class="mt-5 table" id="table-main">
                 <thead class="bg-light">
                     <tr>
                         <th>Id</th>
@@ -60,7 +70,7 @@
                     </tr>
                 </tbody>
             </table>
- -->
+
         </div>
     </div>
     <script>
@@ -113,6 +123,22 @@
                 }
             }
         })
+
+
+        document.getElementById('btn-consolidation').addEventListener('click', () => {
+            document.getElementById('table-consolidation').toggleAttribute('hidden')
+            document.getElementById('btn-consolidation').toggleAttribute('disabled')
+            document.getElementById('table-main').toggleAttribute('hidden')
+            document.getElementById('btn-detailed').toggleAttribute('hidden')
+            
+        })
+        document.getElementById('btn-detailed').addEventListener('click', () => {
+            document.getElementById('table-consolidation').toggleAttribute('hidden')
+            document.getElementById('table-main').toggleAttribute('hidden')
+            document.getElementById('btn-detailed').toggleAttribute('hidden')
+            document.getElementById('btn-consolidation').toggleAttribute('disabled')
+        })
+
     </script>
 </body>
 
