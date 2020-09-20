@@ -7,18 +7,25 @@
     <title>Sales Report</title>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="assets/css/style.css">
 </head>
 
 <body>
-    <script src="vue.min.js"></script>
+    <script src="assets/lib/vue.min.js"></script>
     <div class="app">
         
     </div>
 
     <script>
         new Vue({
-            el: '#app'
+            el: '#app',
+            data: {
+            title:'Sales Report',
+            sales: null
+        },
+            methods: {
+
+            }
         })
     </script>
 </body>
