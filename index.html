@@ -5,8 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sales Report</title>
-    <script src="assets/lib/vue.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="assets/lib/vue.min.js"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
@@ -17,10 +17,33 @@
             <div class="container bg-info" id="div-title" style="padding: 0.8rem; border-radius: 0.28rem;">
                 <h1 class="mt-2">{{title}}</h1>
             </div>
-            <table class="mt-5 table">
+            <table class="mt-5 table" v-if="salesProducts">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Name</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="(sale, index) in salesProducts">
+                        <td>{{index + 1}}</td>
+                        <td>{{sale.name}}</td>
+                        <td>{{sale.value}}</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td>SOMA</td>
+                        <td>TOTAL</td>
+                        <td>{{calculatTheTotal(salesProducts)}}</tr>
+                    </tr>
+                </tfoot>
+            </table>
+            <!-- <table class="mt-5 table">
                 <thead class="bg-light">
                     <tr>
-                        <th>ID</th>
+                        <th>Id</th>
                         <th>Name</th>
                         <th>Price</th>
                         <th>Amount</th>
@@ -31,13 +54,13 @@
                     <tr v-for="sale in sales">
                         <td>{{sale.id}}</td>
                         <td>{{sale.name}}</td>
-                        <td v-money="'$'">{{sale.price}}</td>
+                        <td>{{sale.price}}</td>
                         <td>{{sale.qtde}}</td>
                         <td>{{sale.date}}</td>
                     </tr>
                 </tbody>
             </table>
-
+ -->
         </div>
     </div>
     <script>
@@ -58,11 +81,37 @@
                     fetch('db_sales/sales.json')
                         .then(resp => resp.json())
                         .then(data => this.sales = data)
+                },
+                calculatTheTotal(sales) {
+                    if (!sales) return 0
+                    return sales.reduce((total, sale) => total + sale.value, 0)
                 }
             },
             mounted() {
                 this.getSales()
             },
+            computed: {
+                salesProducts() {
+                    if (!this.sales) return null
+
+                    const salesProduct = this.sales.reduce((together, sale) => {
+                        if (!together.hasOwnProperty(sale.name)) {
+                            together[sale.name] = {
+                                name: sale.name,
+                                value: sale.price * sale.qtde
+                            }
+                            return together
+                        }
+
+                        together[sale.name].value += sale.price * sale.qtde
+                        return together
+
+                    }, {})
+
+                    return Object.values(salesProduct)
+
+                }
+            }
         })
     </script>
 </body>
